@@ -111,44 +111,52 @@ namespace Blog.Service.Concrete
          }
 
       }
-      public async Task<IResult> HardDeleteAsync(CategoryDto categoryDto)
+      public async Task<IResult> HardDeleteAsync(int categoryId)
       {
          try
          {
-            BusinessRules.Run(NullCheck(categoryDto));
+            var category = await _repository.GetAsync<Category>(x => x.CategoryId == categoryId);
+            var articleCategory = await _repository.GetAllAsync<ArticleCategory>(x => x.CategoryId == categoryId);
 
-            var mappedCategory = _mapper.Map<Category>(categoryDto);
-            await _repository.HardDeleteAsync<Category>(mappedCategory);
+            BusinessRules.Run(NullCheck(category));
+
+            foreach (var ac in articleCategory)
+            {
+               await _repository.HardDeleteAsync<ArticleCategory>(ac);
+            }
+            await _repository.HardDeleteAsync<Category>(category);
 
             _logger.LogInformation("Called : HardDeleteAsync");
-            _cacheService.Remove(CacheKeys.CategoryGetAll.ToString(), CacheKeys.CategoryGet.ToString());
+            _cacheService.Remove(CacheKeys.CategoryGetAll.ToString());
 
             return new SuccessResult(Messages.HardDeleted);
          }
          catch (Exception exception)
          {
             _logger.LogError(exception, "Error : HardDeleteAsync");
-            return new ErrorDataResult<CategoryDto>(categoryDto, exception.Message);
+            return new ErrorResult(exception.Message);
          }
 
       }
-      public async Task<IResult> SoftDeleteAsync(CategoryDto categoryDto)
+      public async Task<IResult> SoftDeleteAsync(int categoryId)
       {
          try
          {
-            BusinessRules.Run(NullCheck(categoryDto));
+            var category = await _repository.GetAsync<Category>(x => x.CategoryId == categoryId);
 
-            await _repository.SoftDeleteAsync<CategoryDto>(categoryDto);
+            BusinessRules.Run(NullCheck(category));
+
+            await _repository.SoftDeleteAsync<Category>(category);
 
             _logger.LogInformation("Called : SoftDeleteAsync");
-            _cacheService.Remove(CacheKeys.CategoryGetAll.ToString(), CacheKeys.CategoryGet.ToString());
+            _cacheService.Remove(CacheKeys.CategoryGetAll.ToString());
 
             return new SuccessResult(Messages.SoftDeleted);
          }
          catch (Exception exception)
          {
             _logger.LogError(exception, "Error : SoftDeleteAsync");
-            return new ErrorDataResult<CategoryDto>(categoryDto, exception.Message);
+            return new ErrorResult(exception.Message);
          }
       }
       public async Task<IDataResult<List<CategoryDto>>> GetCategoriesByArticleId(int articleId)

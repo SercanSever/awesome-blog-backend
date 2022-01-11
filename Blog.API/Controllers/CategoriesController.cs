@@ -48,18 +48,18 @@ namespace Blog.API.Controllers
          return Ok(category);
       }
       [HttpDelete("hardDelete")]
-      public async Task<IActionResult> HardDelete(CategoryDto categoryDto)
+      public async Task<IActionResult> HardDelete(int categoryId)
       {
-         var category = await _categoryService.HardDeleteAsync(categoryDto);
+         var category = await _categoryService.HardDeleteAsync(categoryId);
          if (!category.Success)
             return BadRequest(category);
 
          return Ok(category);
       }
       [HttpDelete("softDelete")]
-      public async Task<IActionResult> SoftDelete(CategoryDto categoryDto)
+      public async Task<IActionResult> SoftDelete(int categoryId)
       {
-         var category = await _categoryService.SoftDeleteAsync(categoryDto);
+         var category = await _categoryService.SoftDeleteAsync(categoryId);
          if (!category.Success)
             return BadRequest(category);
 

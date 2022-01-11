@@ -114,6 +114,7 @@ namespace Blog.DAL.Repository
       public virtual async Task SoftDeleteAsync<T>(T entity) where T : class, ISoftDeleteEntity, new()
       {
          entity.IsDeleted = !entity.IsDeleted;
+         entity.DeletionDate = DateTime.Now;
          await ReplaceAsync<T>(entity);
       }
 

@@ -10,6 +10,6 @@ namespace Blog.Service.Dto
       public DateTime? UpdateDate { get; set; }
 
       public DateTime? DeletionDate { get; set; }
-      public bool IsDeleted { get; set; } = false;
+      public bool IsDeleted { get; set; }
    }
 }

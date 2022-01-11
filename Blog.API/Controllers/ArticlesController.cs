@@ -49,7 +49,7 @@ namespace Blog.API.Controllers
       [HttpPost("add")]
       public async Task<IActionResult> AddArticle(ArticleDto articleDto)
       {
-         var validationResult = _articleValidator.Validate(articleDto);
+         var validationResult = await _articleValidator.ValidateAsync(articleDto);
          if (!validationResult.IsValid)
             return BadRequest(validationResult.Errors);
 
@@ -114,9 +114,5 @@ namespace Blog.API.Controllers
 
          return Ok(article);
       }
-
-
-
-
    }
 }

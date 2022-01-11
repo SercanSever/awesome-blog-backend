@@ -4,7 +4,7 @@ namespace Blog.Service.Constants
    {
       public static string Added = "Successfully added.";
       public static string HardDeleted = "Permanently deleted.";
-      public static string SoftDeleted = "Temporarily deleted.";
+      public static string SoftDeleted = "Status change successfully.";
       public static string Updated = "Successfully updated.";
       public static string Listed = "Successfully listed.";
       public static string Exists = "Already exists.";

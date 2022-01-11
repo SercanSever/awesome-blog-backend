@@ -15,6 +15,6 @@ namespace Blog.Service.Dto
       public DateTime UploadDate { get; set; }
       public DateTime? UpdateDate { get; set; }
       public DateTime? DeletionDate { get; set; }
-      public bool IsDeleted { get; set; } = false;
+      public bool IsDeleted { get; set; }
    }
 }

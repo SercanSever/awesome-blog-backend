@@ -1,6 +1,8 @@
+using Blog.DAL.Repository;
+
 namespace Blog.DATA.Entity
 {
-   public partial class Comment
+   public partial class Comment : ISoftDeleteEntity
    {
 
       public int CommentId { get; set; }
@@ -12,5 +14,7 @@ namespace Blog.DATA.Entity
 
       public int ArticleId { get; set; }
       public virtual Article Article { get; set; }
+      public DateTime? DeletionDate { get; set; }
+      public bool IsDeleted { get; set; }
    }
 }
