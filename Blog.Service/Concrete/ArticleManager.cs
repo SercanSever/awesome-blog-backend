@@ -113,14 +113,20 @@ namespace Blog.Service.Concrete
          }
 
       }
-      public async Task<IResult> HardDeleteAsync(ArticleDto articleDto)
+      public async Task<IResult> HardDeleteAsync(int articleId)
       {
          try
          {
-            BusinessRules.Run(NullCheck(articleDto));
+            var article = await _repository.GetAsync<Article>(x => x.ArticleId == articleId);
+            var articleCategory = await _repository.GetAllAsync<ArticleCategory>(x => x.ArticleId == articleId);
 
-            var mappedArticle = _mapper.Map<Article>(articleDto);
-            await _repository.HardDeleteAsync<Article>(mappedArticle);
+            BusinessRules.Run(NullCheck(article));
+
+            foreach (var ac in articleCategory)
+            {
+               await _repository.HardDeleteAsync<ArticleCategory>(ac);
+            }
+            await _repository.HardDeleteAsync<Article>(article);
 
             _logger.LogInformation("Called : HardDeleteAsync");
             _cacheService.Remove(CacheKeys.ArticleGetAll.ToString(), CacheKeys.ArticleGet.ToString());
@@ -130,17 +136,18 @@ namespace Blog.Service.Concrete
          catch (Exception exception)
          {
             _logger.LogError(exception, "Error : HardDeleteAsync");
-            return new ErrorDataResult<ArticleDto>(articleDto, exception.Message);
+            return new ErrorResult(exception.Message);
          }
 
       }
-      public async Task<IResult> SoftDeleteAsync(ArticleDto articleDto)
+      public async Task<IResult> SoftDeleteAsync(int articleId)
       {
          try
          {
-            BusinessRules.Run(NullCheck(articleDto));
+            var article = await _repository.GetAsync<Article>(x => x.ArticleId == articleId);
+            BusinessRules.Run(NullCheck(article));
 
-            await _repository.SoftDeleteAsync<ArticleDto>(articleDto);
+            await _repository.SoftDeleteAsync<Article>(article);
 
             _logger.LogInformation("Called : SoftDeleteAsync");
             _cacheService.Remove(CacheKeys.ArticleGetAll.ToString(), CacheKeys.ArticleGet.ToString());
@@ -150,7 +157,7 @@ namespace Blog.Service.Concrete
          catch (Exception exception)
          {
             _logger.LogError(exception, "Error : SoftDeleteAsync");
-            return new ErrorDataResult<ArticleDto>(articleDto, exception.Message);
+            return new ErrorResult(exception.Message);
          }
       }
       public async Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryIdAsync(int categoryId)

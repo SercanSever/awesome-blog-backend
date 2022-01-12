@@ -84,7 +84,7 @@ namespace Blog.API.Controllers
          return Ok(categories);
       }
       [HttpGet("getByName")]
-      public async Task<IActionResult> GetByArticleId(string categoryName)
+      public async Task<IActionResult> GetByArticleName(string categoryName)
       {
          var categories = await _categoryService.GetByName(categoryName);
          if (!categories.Success)

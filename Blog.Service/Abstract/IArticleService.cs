@@ -9,8 +9,8 @@ namespace Blog.Service.Abstract
       Task<IDataResult<List<ArticleDto>>> GetAllAsync();
       Task<IDataResult<ArticleDto>> AddAsync(ArticleDto articleDto);
       Task<IDataResult<ArticleDto>> GetById(int id);
-      Task<IResult> HardDeleteAsync(ArticleDto articleDto);
-      Task<IResult> SoftDeleteAsync(ArticleDto articleDto);
+      Task<IResult> HardDeleteAsync(int articleId);
+      Task<IResult> SoftDeleteAsync(int articleId);
       Task<IDataResult<ArticleDto>> UpdateAsync(ArticleDto articleDto);
       Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryIdAsync(int categoryId);
       Task<IDataResult<List<ArticleDto>>> GetByName(string articleName);
