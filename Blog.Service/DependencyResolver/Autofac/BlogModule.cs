@@ -19,6 +19,7 @@ namespace Blog.Service.DependencyResolver.Autofac
          builder.RegisterType<ArticleManager>().As<IArticleService>();
          builder.RegisterType<CategoryManager>().As<ICategoryService>();
          builder.RegisterType<ArticleCategoryManager>().As<IArticleCategoryService>();
+         builder.RegisterType<ImageManager>().As<IImageService>();
 
          builder.RegisterType<BlogContext>().As<DbContext>().SingleInstance();
          builder.RegisterType<Repository>().As<IRepository>().SingleInstance();
@@ -29,6 +30,7 @@ namespace Blog.Service.DependencyResolver.Autofac
          builder.RegisterType<ImageValidator>().As<IValidator<ImageDto>>().SingleInstance();
          builder.RegisterType<ArticleCategoryValidator>().As<IValidator<ArticleCategoryDto>>().SingleInstance();
          builder.RegisterType<CategoryValidator>().As<IValidator<CategoryDto>>().SingleInstance();
+
       }
    }
 }
