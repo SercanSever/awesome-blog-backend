@@ -28,6 +28,7 @@ namespace Blog.Service.Concrete
       }
       public async Task<IDataResult<List<CategoryDto>>> GetAllAsync()
       {
+         //try
          try
          {
             _logger.LogInformation("Called : GetAllAsync");
