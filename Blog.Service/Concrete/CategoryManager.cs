@@ -196,6 +196,27 @@ namespace Blog.Service.Concrete
             throw;
          }
       }
+      public async Task<IDataResult<List<string>>> GetAllCategoryNamesAsync()
+      {
+         try
+         {
+            _logger.LogInformation("Called : GetAllCategoryNamesAsync");
+
+            var categories = await _repository.GetAllAsync<Category>();
+            var mappedCategory = _mapper.Map<List<CategoryDto>>(categories);
+            var result = mappedCategory.Select(x => x.Name).ToList();
+
+            BusinessRules.Run(NullCheck(mappedCategory));
+
+            return new SuccessDataResult<List<string>>(result, Messages.Listed);
+
+         }
+         catch (Exception exception)
+         {
+            _logger.LogError(exception, "Error : GetAllCategoryNamesAsync");
+            throw;
+         }
+      }
 
 
 
@@ -210,6 +231,7 @@ namespace Blog.Service.Concrete
          }
          return new SuccessResult(Messages.Success);
       }
+
 
    }
 }

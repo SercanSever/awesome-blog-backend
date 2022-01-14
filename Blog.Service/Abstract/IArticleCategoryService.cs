@@ -8,6 +8,6 @@ namespace Blog.Service.Abstract
       Task<IDataResult<List<ArticleCategoryDto>>> GetAllAsync();
       Task<IDataResult<ArticleCategoryDto>> AddAsync(ArticleCategoryDto articleCategoryDto);
       Task<IDataResult<ArticleCategoryDto>> GetByIdAsync(int id);
-      Task<IResult> AddCategoryAsync(List<ArticleCategoryDto> articleCategoryDto);
+      Task<IResult> AddCategoryAsync(int articleId, List<string> categoryNames);
    }
 }

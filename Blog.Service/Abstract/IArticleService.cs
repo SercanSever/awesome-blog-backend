@@ -15,5 +15,6 @@ namespace Blog.Service.Abstract
       Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryIdAsync(int categoryId);
       Task<IDataResult<List<ArticleDto>>> GetByName(string articleName);
       Task<IDataResult<ArticleDto>> GetByUrl(string url);
+      Task<IDataResult<int>> GetLastArticleId();
    }
 }

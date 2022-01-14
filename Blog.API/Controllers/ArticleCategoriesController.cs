@@ -9,10 +9,12 @@ namespace Blog.API.Controllers
    public class ArticleCategoriesController : ControllerBase
    {
       private readonly IArticleCategoryService _articleCategoriesService;
+      private readonly IArticleService _articleService;
 
-      public ArticleCategoriesController(IArticleCategoryService articleCategoriesService)
+      public ArticleCategoriesController(IArticleCategoryService articleCategoriesService, IArticleService articleService)
       {
          _articleCategoriesService = articleCategoriesService;
+         _articleService = articleService;
       }
       [HttpGet("getAll")]
       public async Task<IActionResult> GetAllArticleCategories()
@@ -33,13 +35,17 @@ namespace Blog.API.Controllers
          return Ok(articleCategories);
       }
       [HttpPost("addCategory")]
-      public async Task<IActionResult> AddCategory(List<ArticleCategoryDto> articleCategoryDto)
+      public async Task<IActionResult> AddCategory(int articleId, List<string> categoryNames)
       {
-         var article = await _articleCategoriesService.AddCategoryAsync(articleCategoryDto);
-         if (!article.Success)
-            return BadRequest(article);
-
-         return Ok(article);
+         if (articleId == 0)
+         {
+            var lastArticle = _articleService.GetLastArticleId();
+            var article = await _articleCategoriesService.AddCategoryAsync(lastArticle.Result.Data, categoryNames);
+            if (!article.Success)
+               return BadRequest(article);
+            return Ok(article);
+         }
+         return Ok();
       }
 
    }

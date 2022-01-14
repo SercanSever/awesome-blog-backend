@@ -19,12 +19,16 @@ namespace Blog.Service.Concrete
       private readonly IMapper _mapper;
       private readonly ICacheService _cacheService;
       private readonly ILogger<ArticleCategoryManager> _logger;
-      public ArticleCategoryManager(IRepository repository, IMapper mapper, ILogger<ArticleCategoryManager> logger, ICacheService cacheService)
+      private readonly ICategoryService _categoryService;
+      private readonly IArticleService _articeService;
+      public ArticleCategoryManager(IRepository repository, IMapper mapper, ILogger<ArticleCategoryManager> logger, ICacheService cacheService, ICategoryService categoryService, IArticleService articleService)
       {
          _repository = repository;
          _mapper = mapper;
          _logger = logger;
          _cacheService = cacheService;
+         _categoryService = categoryService;
+         _articeService = articleService;
       }
       public async Task<IDataResult<ArticleCategoryDto>> AddAsync(ArticleCategoryDto articleCategoryDto)
       {
@@ -57,13 +61,19 @@ namespace Blog.Service.Concrete
          var mappedCategory = _mapper.Map<ArticleCategoryDto>(category);
          return new SuccessDataResult<ArticleCategoryDto>(mappedCategory, Messages.Listed);
       }
-      public async Task<IResult> AddCategoryAsync(List<ArticleCategoryDto> articleCategoryDto)
+      public async Task<IResult> AddCategoryAsync(int articleId, List<string> categoryNames)
       {
          try
          {
-            BusinessRules.Run(NullCheck(articleCategoryDto));
-            var mappedCategory = _mapper.Map<List<ArticleCategory>>(articleCategoryDto);
-            await _repository.AddRangeAsync<ArticleCategory>(mappedCategory);
+
+            foreach (var categoryName in categoryNames)
+            {
+               var categoryId = _categoryService.GetByName(categoryName).Result.Data.CategoryId;
+               var articleCategories = new ArticleCategory();
+               articleCategories.ArticleId = articleId;
+               articleCategories.CategoryId = categoryId;
+               await _repository.AddAsync(articleCategories);
+            }
 
             _logger.LogInformation("Called : AddCategoryAsync");
             _cacheService.Remove(CacheKeys.ArticleGetAll.ToString(), CacheKeys.ArticleGet.ToString());

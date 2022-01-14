@@ -6,6 +6,7 @@ namespace Blog.Service.Abstract
    public interface ICategoryService
    {
       Task<IDataResult<List<CategoryDto>>> GetAllAsync();
+      Task<IDataResult<List<string>>> GetAllCategoryNamesAsync();
       Task<IDataResult<CategoryDto>> AddAsync(CategoryDto categoryDto);
       Task<IDataResult<CategoryDto>> GetById(int id);
       Task<IResult> HardDeleteAsync(int categoryId);

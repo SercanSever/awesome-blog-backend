@@ -25,6 +25,15 @@ namespace Blog.API.Controllers
 
          return Ok(categories);
       }
+      [HttpGet("getAllNames")]
+      public async Task<IActionResult> GetAllCategoryNames()
+      {
+         var categories = await _categoryService.GetAllCategoryNamesAsync();
+         if (!categories.Success)
+            return BadRequest();
+
+         return Ok(categories);
+      }
       [HttpGet("get")]
       public async Task<IActionResult> GetById(int categoryId)
       {

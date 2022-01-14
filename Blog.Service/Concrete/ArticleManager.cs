@@ -20,14 +20,13 @@ namespace Blog.Service.Concrete
       private readonly IMapper _mapper;
       private readonly ICacheService _cacheService;
       private readonly ILogger<ArticleManager> _logger;
-      private readonly IArticleCategoryService _articleCategoryService;
-      public ArticleManager(IRepository repository, IMapper mapper, ICacheService cacheService, ILogger<ArticleManager> logger, IArticleCategoryService articleCategoryService)
+      public ArticleManager(IRepository repository, IMapper mapper, ICacheService cacheService, ILogger<ArticleManager> logger)
       {
          _repository = repository;
          _mapper = mapper;
          _cacheService = cacheService;
          _logger = logger;
-         _articleCategoryService = articleCategoryService;
+
       }
       public async Task<IDataResult<List<ArticleDto>>> GetAllAsync()
       {
@@ -65,6 +64,25 @@ namespace Blog.Service.Concrete
          catch (Exception exception)
          {
             _logger.LogError(exception, "Error : GetById");
+            throw;
+         }
+
+      }
+      public async Task<IDataResult<int>> GetLastArticleId()
+      {
+         try
+         {
+            _logger.LogInformation("Called : GetLastArticleId");
+            var entity = await _repository.GetAllAsync<Article>();
+            var lastArticle = entity.OrderByDescending(x => x.ArticleId).Take(1).First();
+
+            BusinessRules.Run(NullCheck(lastArticle));
+
+            return new SuccessDataResult<int>(lastArticle.ArticleId, Messages.Listed);
+         }
+         catch (Exception exception)
+         {
+            _logger.LogError(exception, "Error : GetLastArticleId");
             throw;
          }
 
