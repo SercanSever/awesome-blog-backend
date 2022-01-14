@@ -73,10 +73,11 @@ namespace Blog.Service.Concrete
       {
          try
          {
-            BusinessRules.Run(NullCheck(articleDto));
+            BusinessRules.Run(NullCheck(articleDto), ConvertNameToUrl(articleDto));
 
             var mappedArticle = _mapper.Map<Article>(articleDto);
             articleDto.UploadDate = DateTime.Now;
+
             await _repository.AddAsync(mappedArticle);
 
             _logger.LogInformation("Called : AddAsync");
@@ -226,6 +227,12 @@ namespace Blog.Service.Concrete
          if (value == null)
             return new ErrorResult(Messages.NullOrEmpty);
 
+         return new SuccessResult(Messages.Success);
+      }
+
+      private IResult ConvertNameToUrl(ArticleDto articleDto)
+      {
+         articleDto.NameUrl = articleDto.Name.Replace(" ", "-").ToLower();
          return new SuccessResult(Messages.Success);
       }
 

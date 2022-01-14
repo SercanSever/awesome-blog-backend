@@ -45,6 +45,7 @@ try
 
    //DI
    builder.Services.AddSingleton(autoMapper);
+   builder.Services.AddHttpContextAccessor();
 
    //Autofac Ioc.
    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());

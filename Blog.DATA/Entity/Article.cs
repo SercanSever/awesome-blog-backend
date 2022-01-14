@@ -2,7 +2,7 @@ using Blog.DAL.Repository;
 
 namespace Blog.DATA.Entity
 {
-   public partial class Article :ISoftDeleteEntity
+   public partial class Article : ISoftDeleteEntity
    {
       public int ArticleId { get; set; }
       public string Name { get; set; }
