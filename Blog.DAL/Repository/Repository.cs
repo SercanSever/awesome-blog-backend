@@ -60,9 +60,9 @@ namespace Blog.DAL.Repository
          : await _context.Set<T>().Where(filter).ToListAsync();
       }
 
-      public Task<T> GetAsync<T>(Expression<Func<T, bool>> filter) where T : class, new()
+      public async Task<T> GetAsync<T>(Expression<Func<T, bool>> filter) where T : class, new()
       {
-         return _context.Set<T>().FirstOrDefaultAsync(filter);
+         return await _context.Set<T>().FirstOrDefaultAsync(filter);
       }
 
       public virtual void HardDelete<T>(T entity) where T : class, new()

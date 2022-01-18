@@ -50,6 +50,7 @@ try
    //Autofac Ioc.
    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
    builder.Host.ConfigureContainer<ContainerBuilder>(b => b.RegisterModule(new BlogModule()));
+
    builder.Services.ConfigureCaching();
 
    // NLog
