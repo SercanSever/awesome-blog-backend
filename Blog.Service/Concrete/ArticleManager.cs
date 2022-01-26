@@ -19,13 +19,15 @@ namespace Blog.Service.Concrete
       private readonly IRepository _repository;
       private readonly IMapper _mapper;
       private readonly ICacheService _cacheService;
+      private readonly ICategoryService _categoryService;
       private readonly ILogger<ArticleManager> _logger;
-      public ArticleManager(IRepository repository, IMapper mapper, ICacheService cacheService, ILogger<ArticleManager> logger)
+      public ArticleManager(IRepository repository, IMapper mapper, ICacheService cacheService, ILogger<ArticleManager> logger, ICategoryService categoryService)
       {
          _repository = repository;
          _mapper = mapper;
          _cacheService = cacheService;
          _logger = logger;
+         _categoryService = categoryService;
 
       }
       public async Task<IDataResult<List<ArticleDto>>> GetAllAsync()
@@ -198,6 +200,26 @@ namespace Blog.Service.Concrete
             throw;
          }
       }
+      public async Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryNameAsync(string categoryName)
+      {
+         try
+         {
+            _logger.LogInformation("Called : GetArticlesByCategoryNameAsync");
+            using (var context = new BlogContext())
+            {
+               var category = await _categoryService.GetByName(categoryName);
+               var articles = await context.ArticleCategories.Include(x => x.Article).Where(x => x.CategoryId == category.Data.CategoryId).Select(x => x.Article).ToListAsync();
+               var mappedArticle = _mapper.Map<List<ArticleDto>>(articles);
+               BusinessRules.Run(NullCheck(mappedArticle));
+               return new SuccessDataResult<List<ArticleDto>>(mappedArticle, Messages.Listed);
+            }
+         }
+         catch (Exception exception)
+         {
+            _logger.LogError(exception, "Error : GetArticlesByCategoryNameAsync");
+            throw;
+         }
+      }
       public async Task<IDataResult<List<ArticleDto>>> GetByName(string articleName)
       {
          try
@@ -253,6 +275,7 @@ namespace Blog.Service.Concrete
          articleDto.NameUrl = articleDto.Name.Replace(" ", "-").ToLower();
          return new SuccessResult(Messages.Success);
       }
+
 
    }
 }

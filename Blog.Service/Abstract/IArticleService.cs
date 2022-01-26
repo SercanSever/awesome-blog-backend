@@ -13,6 +13,7 @@ namespace Blog.Service.Abstract
       Task<IResult> SoftDeleteAsync(int articleId);
       Task<IDataResult<ArticleDto>> UpdateAsync(ArticleDto articleDto);
       Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryIdAsync(int categoryId);
+      Task<IDataResult<List<ArticleDto>>> GetArticlesByCategoryNameAsync(string categoryName);
       Task<IDataResult<List<ArticleDto>>> GetByName(string articleName);
       Task<IDataResult<ArticleDto>> GetByUrl(string url);
       Task<IDataResult<int>> GetLastArticleId();

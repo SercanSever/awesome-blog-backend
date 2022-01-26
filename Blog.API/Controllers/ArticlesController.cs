@@ -95,20 +95,19 @@ namespace Blog.API.Controllers
 
          return Ok(article);
       }
-      [HttpPost("addCategory")]
-      public IActionResult AddCategory(int articleId, int categoryId)
+      [HttpGet("getbycategoryname")]
+      public async Task<IActionResult> GetArticlesByCategoryName(string categoryName)
       {
-         // var article = _articleService.AddCategory(articleId, categoryId);
-         // if (!article.Success)
-         //    return BadRequest(article);
+         var article = await _articleService.GetArticlesByCategoryNameAsync(categoryName);
+         if (!article.Success)
+            return BadRequest(article);
 
-         // return Ok(article);
-         return Ok();
+         return Ok(article);
       }
-      [HttpGet("url")]
-      public async Task<IActionResult> GetArticlesByCategoryId(string articleUrl)
+      [HttpGet("getbyurl")]
+      public async Task<IActionResult> GetArticlesByUrl(string nameUrl)
       {
-         var article = await _articleService.GetByUrl(articleUrl);
+         var article = await _articleService.GetByUrl(nameUrl);
          if (!article.Success)
             return BadRequest(article);
 
