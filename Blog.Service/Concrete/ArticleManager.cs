@@ -39,7 +39,10 @@ namespace Blog.Service.Concrete
             {
                var articles = await _repository.GetAllAsync<Article>();
                var mappedArticle = _mapper.Map<List<ArticleDto>>(articles);
-
+               foreach (var mArticle in mappedArticle)
+               {
+                  mArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
+               }
                BusinessRules.Run(NullCheck(mappedArticle));
 
                return new SuccessDataResult<List<ArticleDto>>(mappedArticle, Messages.Listed);
@@ -58,6 +61,7 @@ namespace Blog.Service.Concrete
             _logger.LogInformation("Called : GetById");
             var entity = await _repository.GetAsync<Article>(x => x.ArticleId == id);
             var mappedArticle = _mapper.Map<ArticleDto>(entity);
+            mappedArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mappedArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
 
             BusinessRules.Run(NullCheck(entity));
 
@@ -190,6 +194,10 @@ namespace Blog.Service.Concrete
             {
                var articles = await context.ArticleCategories.Include(x => x.Article).Where(x => x.CategoryId == categoryId).Select(x => x.Article).ToListAsync();
                var mappedArticle = _mapper.Map<List<ArticleDto>>(articles);
+               foreach (var mArticle in mappedArticle)
+               {
+                  mArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
+               }
                BusinessRules.Run(NullCheck(mappedArticle));
                return new SuccessDataResult<List<ArticleDto>>(mappedArticle, Messages.Listed);
             }
@@ -210,6 +218,10 @@ namespace Blog.Service.Concrete
                var category = await _categoryService.GetByName(categoryName);
                var articles = await context.ArticleCategories.Include(x => x.Article).Where(x => x.CategoryId == category.Data.CategoryId).Select(x => x.Article).ToListAsync();
                var mappedArticle = _mapper.Map<List<ArticleDto>>(articles);
+               foreach (var mArticle in mappedArticle)
+               {
+                  mArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
+               }
                BusinessRules.Run(NullCheck(mappedArticle));
                return new SuccessDataResult<List<ArticleDto>>(mappedArticle, Messages.Listed);
             }
@@ -227,6 +239,10 @@ namespace Blog.Service.Concrete
             _logger.LogInformation("Called : GetByName");
             var entity = await _repository.GetAllAsync<Article>(x => x.Name.Contains(articleName));
             var mappedArticle = _mapper.Map<List<ArticleDto>>(entity);
+            foreach (var mArticle in mappedArticle)
+            {
+               mArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
+            }
 
             BusinessRules.Run(NullCheck(entity));
 
@@ -245,6 +261,7 @@ namespace Blog.Service.Concrete
             _logger.LogInformation("Called : GetByUrl");
             var entity = await _repository.GetAsync<Article>(x => x.NameUrl == url);
             var mappedArticle = _mapper.Map<ArticleDto>(entity);
+            mappedArticle.CategoryNames = _categoryService.GetCategoriesByArticleId(mappedArticle.ArticleId).Result.Data.Select(x => x.Name).ToList();
 
             BusinessRules.Run(NullCheck(entity));
 

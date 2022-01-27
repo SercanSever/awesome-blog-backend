@@ -12,6 +12,7 @@ namespace Blog.Service.Dto
       public string Author { get; set; }
       public int? CommentId { get; set; }
       public int? ImageId { get; set; }
+      public List<string>? CategoryNames { get; set; }
       public DateTime UploadDate { get; set; }
       public DateTime? UpdateDate { get; set; }
       public DateTime? DeletionDate { get; set; }
