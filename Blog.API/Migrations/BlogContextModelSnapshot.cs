@@ -4,18 +4,16 @@ using Blog.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Blog.DAL.Migrations
+namespace Blog.API.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20211230130603_initial2")]
-    partial class initial2
+    partial class BlogContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +33,16 @@ namespace Blog.DAL.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -90,6 +98,12 @@ namespace Blog.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -119,6 +133,12 @@ namespace Blog.DAL.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -152,6 +172,12 @@ namespace Blog.DAL.Migrations
                     b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -172,13 +198,13 @@ namespace Blog.DAL.Migrations
             modelBuilder.Entity("Blog.DATA.Entity.ArticleCategory", b =>
                 {
                     b.HasOne("Blog.DATA.Entity.Article", "Article")
-                        .WithMany("ArticleCategories")
+                        .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Blog.DATA.Entity.Category", "Category")
-                        .WithMany("ArticleCategories")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -191,7 +217,7 @@ namespace Blog.DAL.Migrations
             modelBuilder.Entity("Blog.DATA.Entity.Comment", b =>
                 {
                     b.HasOne("Blog.DATA.Entity.Article", "Article")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -202,26 +228,12 @@ namespace Blog.DAL.Migrations
             modelBuilder.Entity("Blog.DATA.Entity.Image", b =>
                 {
                     b.HasOne("Blog.DATA.Entity.Article", "Article")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Article");
-                });
-
-            modelBuilder.Entity("Blog.DATA.Entity.Article", b =>
-                {
-                    b.Navigation("ArticleCategories");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("Blog.DATA.Entity.Category", b =>
-                {
-                    b.Navigation("ArticleCategories");
                 });
 #pragma warning restore 612, 618
         }

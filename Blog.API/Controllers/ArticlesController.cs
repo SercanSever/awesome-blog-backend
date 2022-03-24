@@ -113,5 +113,14 @@ namespace Blog.API.Controllers
 
          return Ok(article);
       }
+      [HttpGet("getlastarticles")]
+      public async Task<IActionResult> GetLastArticles()
+      {
+         var article = await _articleService.GetLastArticles();
+         if (!article.Success)
+            return BadRequest(article);
+
+         return Ok(article);
+      }
    }
 }

@@ -26,7 +26,7 @@ try
               options.AddPolicy("BlogOrigin",
               builder =>
               {
-                 builder.WithOrigins("http://localhost:4200")
+                 builder.WithOrigins("https://localhost:4200")
                                   .AllowAnyHeader()
                                   .AllowAnyMethod();
               });
@@ -34,7 +34,7 @@ try
 
    //Context
    builder.Services.AddDbContext<BlogContext>(opt =>
-           opt.UseSqlServer(builder.Configuration.GetConnectionString("BlogConStr"), b => b.MigrationsAssembly("Blog.DAL")));
+           opt.UseSqlServer(builder.Configuration.GetConnectionString("BlogConStr"), b => b.MigrationsAssembly("Blog.API")));
 
    //AutoMapper
    var mappingConfig = new MapperConfiguration(mapper =>

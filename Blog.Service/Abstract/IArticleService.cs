@@ -17,5 +17,6 @@ namespace Blog.Service.Abstract
       Task<IDataResult<List<ArticleDto>>> GetByName(string articleName);
       Task<IDataResult<ArticleDto>> GetByUrl(string url);
       Task<IDataResult<int>> GetLastArticleId();
+      Task<IDataResult<List<ArticleDto>>> GetLastArticles();
    }
 }

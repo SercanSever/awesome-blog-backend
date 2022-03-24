@@ -26,9 +26,6 @@ namespace Blog.API.Controllers
             return await Task.FromResult(new { error = new { message = "Error uploading file" } });
 
          return Task.FromResult(new { url = imageUrl });
-
-
-
       }
    }
 }

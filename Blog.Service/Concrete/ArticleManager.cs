@@ -93,6 +93,24 @@ namespace Blog.Service.Concrete
          }
 
       }
+      public async Task<IDataResult<List<ArticleDto>>> GetLastArticles()
+      {
+         try
+         {
+            _logger.LogInformation("Called : GetLastArticleId");
+            var articles = await _repository.GetAllAsync<Article>();
+            var lastArticles = articles.OrderByDescending(x => x.ArticleId).Take(3).ToList();
+            var mappedArticle = _mapper.Map<List<ArticleDto>>(lastArticles);
+            BusinessRules.Run(NullCheck(lastArticles));
+
+            return new SuccessDataResult<List<ArticleDto>>(mappedArticle, Messages.Listed);
+         }
+         catch (Exception exception)
+         {
+            _logger.LogError(exception, "Error : GetLastArticleId");
+            throw;
+         }
+      }
       public async Task<IDataResult<ArticleDto>> AddAsync(ArticleDto articleDto)
       {
          try
